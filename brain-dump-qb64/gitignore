@@ -1,0 +1,11 @@
+# Ignore compiled binaries and temp files
+*.exe
+*.bin
+*.bak
+*.tmp
+*.o
+*.obj
+*.dll
+
+# Ignore saved ideas if not versioning them
+ideas/
