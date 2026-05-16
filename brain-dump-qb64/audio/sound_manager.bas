@@ -190,5 +190,13 @@ SUB Sound_Play (soundEvent AS INTEGER)
             ' after Theme_Apply so g_ActiveTheme is already set
             PLAY "MB T200 L16 C E G > C"
 
+        ' ---- Stream entry saved (very short confirm tick) ---
+        CASE SND_STREAM_ENTRY
+            SELECT CASE g_ActiveTheme
+                CASE THEME_DOS       : SOUND 1400, 1
+                CASE THEME_CYBERDECK : SOUND 2000, 1
+                CASE ELSE            : SOUND 550,  1   ' Fallout soft tick
+            END SELECT
+
     END SELECT
 END SUB

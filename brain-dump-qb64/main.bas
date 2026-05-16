@@ -94,6 +94,16 @@ CONST MAX_SEARCH_RESULTS = 100
 CONST JOURNAL_FILE = "journal.txt"
 
 ' ------------------------------------------------------------
+' Stream system constants
+' ------------------------------------------------------------
+CONST STREAM_FILE = "stream.txt"
+
+' ------------------------------------------------------------
+' Sound event: stream entry saved (different from SND_CONFIRM)
+' ------------------------------------------------------------
+CONST SND_STREAM_ENTRY = 10
+
+' ------------------------------------------------------------
 ' SearchResult TYPE
 ' ------------------------------------------------------------
 TYPE SearchResult
@@ -131,6 +141,19 @@ TYPE JournalEntry
 END TYPE
 
 ' ------------------------------------------------------------
+' StreamEntry TYPE — rapid thought stream entry structure.
+' sessionID links to the capture session.
+' content truncated; full text stays in stream.txt.
+' ------------------------------------------------------------
+TYPE StreamEntry
+    id          AS INTEGER
+    sessionID   AS INTEGER
+    content     AS STRING * 200
+    createdDate AS STRING * 10
+    createdTime AS STRING * 8
+END TYPE
+
+' ------------------------------------------------------------
 ' Shared global variables — DIM SHARED must appear before any
 ' SUB/FUNCTION in the compiled unit. All modules read these.
 ' ------------------------------------------------------------
@@ -142,6 +165,8 @@ DIM SHARED g_ThemeBorder   AS INTEGER   ' BORDER_* style constant
 DIM SHARED g_ThemeName     AS STRING    ' display name
 DIM SHARED g_SoundEnabled  AS INTEGER   ' runtime sound toggle
 DIM SHARED g_SoundVolume   AS INTEGER   ' future: 0-100 scale
+DIM SHARED g_StreamSessionID AS INTEGER ' current/last stream session ID
+DIM SHARED g_StreamActive    AS INTEGER ' -1 if session open, 0 if not
 
 ' ============================================================
 ' Program variables
@@ -168,6 +193,7 @@ Call Favorites_Init
 Call Search_Init
 Call Export_Init
 Call Journal_Init
+Call Stream_Init
 
 ' ============================================================
 ' Main menu loop — themed ASCII window
@@ -186,27 +212,29 @@ Do While running
 
     COLOR g_ThemeAccentFG, g_ThemeBG
     LOCATE itemRow + 6,  menuCol : PRINT "  7.  Daily journal"
+    LOCATE itemRow + 7,  menuCol : PRINT "  8.  Thought stream"
     COLOR g_ThemeFG, g_ThemeBG
 
-    LOCATE itemRow + 7,  menuCol : PRINT "  8.  Change theme"
-    LOCATE itemRow + 8,  menuCol : PRINT "  9.  Exit"
+    LOCATE itemRow + 8,  menuCol : PRINT "  9.  Change theme"
+    LOCATE itemRow + 9,  menuCol : PRINT "  10. Exit"
 
     ' Animated cursor blink while waiting
-    CALL RetroUI_DrawCursor(itemRow + 10, menuCol + 2, 2)
+    CALL RetroUI_DrawCursor(itemRow + 11, menuCol + 2, 2)
 
-    LOCATE itemRow + 10, menuCol
-    Input "  Choose (1-9): ", choice
+    LOCATE itemRow + 11, menuCol
+    Input "  Choose (1-10): ", choice
 
     Select Case choice
-        Case "1" : Call RetroAudio_PlayMenuMove : Call WriteNewIdea
-        Case "2" : Call RetroAudio_PlayMenuMove : Call ReviewIdeas
-        Case "3" : Call RetroAudio_PlayMenuMove : Call DeleteIdea
-        Case "4" : Call RetroAudio_PlayMenuMove : Call SearchByTag
-        Case "5" : Call RetroAudio_PlayMenuMove : Call SearchEverything
-        Case "6" : Call RetroAudio_PlayMenuMove : Call ExportScreen
-        Case "7" : Call RetroAudio_PlayMenuMove : Call JournalScreen
-        Case "8" : Call RetroAudio_PlayMenuMove : Call RetroUI_ThemeScreen
-        Case "9"
+        Case "1"  : Call RetroAudio_PlayMenuMove : Call WriteNewIdea
+        Case "2"  : Call RetroAudio_PlayMenuMove : Call ReviewIdeas
+        Case "3"  : Call RetroAudio_PlayMenuMove : Call DeleteIdea
+        Case "4"  : Call RetroAudio_PlayMenuMove : Call SearchByTag
+        Case "5"  : Call RetroAudio_PlayMenuMove : Call SearchEverything
+        Case "6"  : Call RetroAudio_PlayMenuMove : Call ExportScreen
+        Case "7"  : Call RetroAudio_PlayMenuMove : Call JournalScreen
+        Case "8"  : Call RetroAudio_PlayMenuMove : Call ThoughtStreamScreen
+        Case "9"  : Call RetroAudio_PlayMenuMove : Call RetroUI_ThemeScreen
+        Case "10"
             running = 0
             Call RetroAudio_PlayConfirm
             Call Window_Clear
@@ -216,7 +244,7 @@ Do While running
             PRINT
         Case Else
             Call RetroAudio_PlayError
-            LOCATE itemRow + 12, menuCol
+            LOCATE itemRow + 13, menuCol
             PRINT "  Invalid. Press any key..."
             SLEEP
     End Select
@@ -252,6 +280,8 @@ End
 '$Include: 'helpers/date_helpers.bas'
 '$Include: 'journal/journal_manager.bas'
 '$Include: 'journal/journal_ui.bas'
+'$Include: 'stream/stream_input.bas'
+'$Include: 'stream/stream_ui.bas'
 '$Include: 'search/search_parser.bas'
 '$Include: 'search/search_engine.bas'
 '$Include: 'search/search_filters.bas'
