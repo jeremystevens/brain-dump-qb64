@@ -34,7 +34,9 @@ FUNCTION Parse_Search_Query$ (rawQuery AS STRING)
            INSTR(LCASE$(token), "priority:") = 0 AND _
            INSTR(LCASE$(token), "fav:") = 0 AND _
            INSTR(LCASE$(token), "favorite:") = 0 AND _
-           INSTR(LCASE$(token), "starred:") = 0 THEN
+           INSTR(LCASE$(token), "starred:") = 0 AND _
+           INSTR(LCASE$(token), "journal:") = 0 AND _
+           INSTR(LCASE$(token), "date:") = 0 THEN
             IF result = "" THEN
                 result = token
             ELSE
