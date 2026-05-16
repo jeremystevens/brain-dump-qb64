@@ -9,6 +9,8 @@
 ' Helper: Extract_Field$
 ' Pulls field N (1-based) from a pipe-delimited record string.
 ' e.g. Extract_Field$("1|5|some idea text #tag", 3) = "some idea text #tag"
+' NOTE: This splits on ALL pipes. Use Extract_RawText$ when the
+'       third field itself contains pipes (e.g. a full idea line).
 ' ============================================================
 FUNCTION Extract_Field$ (record AS STRING, fieldNum AS INTEGER)
     DIM remaining AS STRING
@@ -38,6 +40,35 @@ FUNCTION Extract_Field$ (record AS STRING, fieldNum AS INTEGER)
     LOOP
 
     Extract_Field = ""
+END FUNCTION
+
+' ============================================================
+' Helper: Extract_RawText$
+' Extracts the full raw idea text from a search result record.
+' Result record format: lineNum|score|rawIdeaText
+' Unlike Extract_Field$, this skips only the first 2 pipe
+' separators and returns everything after them as a single
+' string — preserving any pipes inside the raw idea text
+' (e.g. the " | " between the idea body and the tags section).
+' e.g. Extract_RawText$("1|15|[ts] idea | #game") = "[ts] idea | #game"
+' ============================================================
+FUNCTION Extract_RawText$ (record AS STRING)
+    DIM p1 AS INTEGER
+    DIM p2 AS INTEGER
+
+    p1 = INSTR(record, "|")
+    IF p1 = 0 THEN
+        Extract_RawText = record
+        EXIT FUNCTION
+    END IF
+
+    p2 = INSTR(p1 + 1, record, "|")
+    IF p2 = 0 THEN
+        Extract_RawText = MID$(record, p1 + 1)
+        EXIT FUNCTION
+    END IF
+
+    Extract_RawText = MID$(record, p2 + 1)
 END FUNCTION
 
 ' ============================================================
@@ -80,8 +111,9 @@ FUNCTION Filter_By_Tag% (resultBlock AS STRING, tagValue AS STRING, outResults A
         END IF
 
         IF LEN(LTRIM$(record)) > 0 THEN
-            ' Field 3 is the raw idea text
-            rawText = Extract_Field$(record, 3)
+            ' Extract the full raw idea text (fields 3 onward) so that
+            ' tags in the "body | tags" section are not cut off.
+            rawText = Extract_RawText$(record)
 
             IF INSTR(UCASE$(rawText), UCASE$(searchTag)) > 0 THEN
                 count = count + 1
@@ -134,8 +166,9 @@ FUNCTION Filter_By_Priority% (resultBlock AS STRING, priorityValue AS STRING, ou
         END IF
 
         IF LEN(LTRIM$(record)) > 0 THEN
-            ' Field 3 is the raw idea text
-            rawText     = Extract_Field$(record, 3)
+            ' Extract the full raw idea text (fields 3 onward) so that
+            ' priority tags in the "body | tags" section are not cut off.
+            rawText     = Extract_RawText$(record)
             recordLevel = Priority_Parse%(rawText)
 
             ' Include if record meets or exceeds the target level
@@ -184,8 +217,9 @@ FUNCTION Filter_Favorites% (resultBlock AS STRING, outResults AS STRING)
         END IF
 
         IF LEN(LTRIM$(record)) > 0 THEN
-            ' Field 3 is the raw idea text
-            rawText = Extract_Field$(record, 3)
+            ' Extract the full raw idea text (fields 3 onward) so that
+            ' fav:1 markers in the "body | tags" section are not cut off.
+            rawText = Extract_RawText$(record)
 
             IF Favorites_IsFavorite%(rawText) THEN
                 count = count + 1
