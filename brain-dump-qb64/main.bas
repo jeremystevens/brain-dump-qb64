@@ -89,6 +89,11 @@ CONST EXPORT_FMT_HTML = 4
 CONST MAX_SEARCH_RESULTS = 100
 
 ' ------------------------------------------------------------
+' Journal system constants
+' ------------------------------------------------------------
+CONST JOURNAL_FILE = "journal.txt"
+
+' ------------------------------------------------------------
 ' SearchResult TYPE
 ' ------------------------------------------------------------
 TYPE SearchResult
@@ -107,6 +112,22 @@ TYPE IdeaRecord
     favorite AS INTEGER
     title    AS STRING * 200
     tags     AS STRING * 100
+END TYPE
+
+' ------------------------------------------------------------
+' JournalEntry TYPE — canonical journal entry structure.
+' Fixed-length strings required inside QB64 TYPE blocks.
+' content truncated for in-memory use; full text stays in file.
+' ------------------------------------------------------------
+TYPE JournalEntry
+    id           AS INTEGER
+    priority     AS INTEGER
+    favorite     AS INTEGER
+    title        AS STRING * 100
+    content      AS STRING * 200
+    createdDate  AS STRING * 10
+    modifiedDate AS STRING * 10
+    tags         AS STRING * 100
 END TYPE
 
 ' ------------------------------------------------------------
@@ -146,6 +167,7 @@ Call Priority_Init
 Call Favorites_Init
 Call Search_Init
 Call Export_Init
+Call Journal_Init
 
 ' ============================================================
 ' Main menu loop — themed ASCII window
@@ -162,18 +184,18 @@ Do While running
     LOCATE itemRow + 4,  menuCol : PRINT "  5.  Search Everything"
     LOCATE itemRow + 5,  menuCol : PRINT "  6.  Export ideas"
 
-    ' Theme option in accent color
     COLOR g_ThemeAccentFG, g_ThemeBG
-    LOCATE itemRow + 6, menuCol : PRINT "  7.  Change theme"
+    LOCATE itemRow + 6,  menuCol : PRINT "  7.  Daily journal"
     COLOR g_ThemeFG, g_ThemeBG
 
-    LOCATE itemRow + 7,  menuCol : PRINT "  8.  Exit"
+    LOCATE itemRow + 7,  menuCol : PRINT "  8.  Change theme"
+    LOCATE itemRow + 8,  menuCol : PRINT "  9.  Exit"
 
     ' Animated cursor blink while waiting
-    CALL RetroUI_DrawCursor(itemRow + 9, menuCol + 2, 2)
+    CALL RetroUI_DrawCursor(itemRow + 10, menuCol + 2, 2)
 
-    LOCATE itemRow + 9, menuCol
-    Input "  Choose (1-8): ", choice
+    LOCATE itemRow + 10, menuCol
+    Input "  Choose (1-9): ", choice
 
     Select Case choice
         Case "1" : Call RetroAudio_PlayMenuMove : Call WriteNewIdea
@@ -182,8 +204,9 @@ Do While running
         Case "4" : Call RetroAudio_PlayMenuMove : Call SearchByTag
         Case "5" : Call RetroAudio_PlayMenuMove : Call SearchEverything
         Case "6" : Call RetroAudio_PlayMenuMove : Call ExportScreen
-        Case "7" : Call RetroAudio_PlayMenuMove : Call RetroUI_ThemeScreen
-        Case "8"
+        Case "7" : Call RetroAudio_PlayMenuMove : Call JournalScreen
+        Case "8" : Call RetroAudio_PlayMenuMove : Call RetroUI_ThemeScreen
+        Case "9"
             running = 0
             Call RetroAudio_PlayConfirm
             Call Window_Clear
@@ -193,7 +216,7 @@ Do While running
             PRINT
         Case Else
             Call RetroAudio_PlayError
-            LOCATE itemRow + 11, menuCol
+            LOCATE itemRow + 12, menuCol
             PRINT "  Invalid. Press any key..."
             SLEEP
     End Select
@@ -209,9 +232,11 @@ End
 ' crt_effects    — third: uses theme vars
 ' ascii_panels   — fourth: pure primitives, no theme dependency
 ' window_renderer — fifth: uses theme vars + ascii_panels
-' priority/favorites/search — before idea_manager
-' export modules — manager before formatters, ui last
-' menu_utils     — near end (calls Window_DrawScreen%)
+' priority/favorites — before idea_manager and journal_ui
+' date_helpers      — before journal_manager (date formatting)
+' journal_manager   — before journal_ui and search_parser
+' journal_ui        — before search_parser (uses search fns)
+' search modules    — before file/idea/export managers
 ' ============================================================
 '$Include: 'audio/sound_manager.bas'
 '$Include: 'audio/retro_audio.bas'
@@ -224,6 +249,9 @@ End
 '$Include: 'priority/priority_ui.bas'
 '$Include: 'favorites/favorites_manager.bas'
 '$Include: 'favorites/favorites_ui.bas'
+'$Include: 'helpers/date_helpers.bas'
+'$Include: 'journal/journal_manager.bas'
+'$Include: 'journal/journal_ui.bas'
 '$Include: 'search/search_parser.bas'
 '$Include: 'search/search_engine.bas'
 '$Include: 'search/search_filters.bas'
