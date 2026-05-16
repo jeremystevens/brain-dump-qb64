@@ -1,5 +1,6 @@
 # ▓▓ BRAIN DUMP QB64 ▓▓
-### `// RETRO KNOWLEDGE MANAGEMENT SYSTEM // v2.0`
+
+### `// OFFLINE SECOND-BRAIN TERMINAL // v3.0`
 
 > *"The net is vast and infinite."*
 > A second-brain terminal for the cyberdeck age — built in QB64.
@@ -21,7 +22,9 @@
 
 **Brain Dump QB64** is a fully modular, retro terminal-style idea and knowledge management system written in [QB64-PE](https://www.qb64phoenix.com/). It captures, organises, searches, and exports your ideas inside an immersive ASCII UI with themed visuals, CRT effects, and retro sound design.
 
-Built across two development phases — a core feature foundation and a full retro UX layer — every system is modular, expandable, and built to last.
+Built across multiple modular development milestones — beginning with a core feature foundation and a full retro UX layer — the system is evolving into a complete offline second-brain productivity environment.
+
+Every system is modular, expandable, and built to last.
 
 ---
 
@@ -29,26 +32,35 @@ Built across two development phases — a core feature foundation and a full ret
 
 ### `// PHASE 1 — CORE SYSTEMS`
 
-| System | Description |
-|---|---|
-| **Idea Capture** | Write, tag, and save ideas to `ideas.txt` |
-| **Priority System** | Assign `NONE / LOW / MED / HIGH / CRITICAL` to every idea |
-| **Favorites System** | Star ideas with `[*]` — searchable and filterable |
-| **Search Everything** | Full-text search with operators: `tag:` `priority:` `fav:true` `starred:true` |
-| **Search by Tag** | Fast hashtag search with priority and favorite badges |
-| **Export Modes** | Export to `.txt` `.md` `.json` `.html` — all ideas, favorites, or search results |
-| **Delete Idea** | Placeholder — manual edit via `ideas.txt` |
+| System                | Description                                                                      |
+| --------------------- | -------------------------------------------------------------------------------- |
+| **Idea Capture**      | Write, tag, and save ideas to `ideas.txt`                                        |
+| **Priority System**   | Assign `NONE / LOW / MED / HIGH / CRITICAL` to every idea                        |
+| **Favorites System**  | Star ideas with `[*]` — searchable and filterable                                |
+| **Search Everything** | Full-text search with operators: `tag:` `priority:` `fav:true` `starred:true`    |
+| **Search by Tag**     | Fast hashtag search with priority and favorite badges                            |
+| **Export Modes**      | Export to `.txt` `.md` `.json` `.html` — all ideas, favorites, or search results |
+| **Delete Idea**       | Placeholder — manual edit via `ideas.txt`                                        |
 
 ### `// PHASE 2 — RETRO UX LAYER`
 
-| System | Description |
-|---|---|
-| **ASCII UI Panels** | Bordered windows, titled boxes, dividers, text alignment helpers |
-| **Window Renderer** | Named screen regions — title bar, content area, status bar, popups |
-| **Retro UI Mode** | Typed-out boot sequence, animated cursor, fullscreen terminal feel |
-| **Theme Engine** | 3 built-in themes — persistent across sessions via `theme.cfg` |
-| **CRT Effects** | Scanlines, flicker, glow — all optional, theme-controlled |
-| **Sound Design** | Theme-aware retro audio — keypress ticks, boot beeps, confirm chimes |
+| System              | Description                                                          |
+| ------------------- | -------------------------------------------------------------------- |
+| **ASCII UI Panels** | Bordered windows, titled boxes, dividers, text alignment helpers     |
+| **Window Renderer** | Named screen regions — title bar, content area, status bar, popups   |
+| **Retro UI Mode**   | Typed-out boot sequence, animated cursor, fullscreen terminal feel   |
+| **Theme Engine**    | 3 built-in themes — persistent across sessions via `theme.cfg`       |
+| **CRT Effects**     | Scanlines, flicker, glow — all optional, theme-controlled            |
+| **Sound Design**    | Theme-aware retro audio — keypress ticks, boot beeps, confirm chimes |
+
+### `// PHASE 3 — PRODUCTIVITY SYSTEMS`
+
+| System                  | Description                                                                       |
+| ----------------------- | --------------------------------------------------------------------------------- |
+| **Daily Journal Mode**  | Chronological journaling system for tracking thoughts, progress, and productivity |
+| **Thought Stream Mode** | Continuous rapid-capture workflow for low-friction idea dumping                   |
+| **Project Foundation**  | Initial groundwork for future project and task management systems                 |
+| **Date Helpers**        | Shared timestamp and date utility systems for productivity features               |
 
 ---
 
@@ -96,24 +108,41 @@ Ideas are stored in plain text — one idea per line:
 [MM-DD-YYYY HH:MM:SS] idea text | #tag1 #tag2 priority:3 fav:1
 ```
 
-- `priority:N` is omitted for `NONE` — old ideas are backward-compatible
-- `fav:1` is omitted when not starred — old ideas default to unfavorited
-- The file is human-readable and editable in any text editor
+* `priority:N` is omitted for `NONE` — old ideas are backward-compatible
+* `fav:1` is omitted when not starred — old ideas default to unfavorited
+* The file is human-readable and editable in any text editor
 
 ---
 
 ## `> EXPORT FORMATS`
 
-| Format | Extension | Best for |
-|---|---|---|
-| Plain Text | `.txt` | Any text editor, notes apps |
-| Markdown | `.md` | GitHub, wikis, documentation |
-| JSON | `.json` | Backups, APIs, machine processing |
-| HTML | `.html` | Browser viewing, sharing — retro dark theme included |
+| Format     | Extension | Best for                                             |
+| ---------- | --------- | ---------------------------------------------------- |
+| Plain Text | `.txt`    | Any text editor, notes apps                          |
+| Markdown   | `.md`     | GitHub, wikis, documentation                         |
+| JSON       | `.json`   | Backups, APIs, machine processing                    |
+| HTML       | `.html`   | Browser viewing, sharing — retro dark theme included |
 
 Export sources: **All ideas**, **Favorites only**, or **current Search results**.
 
 Filenames are auto-generated with timestamps: `ideas_export_05-15-2026_21-37.txt`
+
+---
+
+## `> PRODUCTIVITY SYSTEMS`
+
+The project is now evolving beyond simple idea capture into a full retro productivity environment.
+
+New productivity-focused systems include:
+
+| System                  | Purpose                                                   |
+| ----------------------- | --------------------------------------------------------- |
+| **Daily Journal Mode**  | Track progress, thoughts, and development chronologically |
+| **Thought Stream Mode** | Capture ideas rapidly with minimal interruption           |
+| **Project Systems**     | Planned structured workflows for projects and milestones  |
+| **Knowledge Systems**   | Future interconnected idea relationships and brain maps   |
+
+These systems are designed to eventually work together as part of a larger offline second-brain architecture.
 
 ---
 
@@ -146,6 +175,11 @@ brain-dump-new/
 ├── priority/
 │   ├── priority_manager.bas    ← Priority levels, weights, parsing
 │   └── priority_ui.bas         ← [HIGH] badge rendering, selection menu
+│
+├── productivity/
+│   ├── journal_manager.bas     ← Daily journal entry management
+│   ├── stream_input.bas        ← Rapid continuous idea capture
+│   └── date_helpers.bas        ← Shared timestamp/date utilities
 │
 ├── search/
 │   ├── search_parser.bas       ← Tokenizer, operator stripping
@@ -189,13 +223,13 @@ DIM SHARED g_ActiveTheme AS INTEGER
 
 **Hard rules across all modules:**
 
-| Rule | Detail |
-|---|---|
-| No `CONST` / `TYPE` / `DIM SHARED` in modules | All in `main.bas` only |
-| No `SOUND` / `BEEP` / `PLAY` outside `sound_manager.bas` | Use `RetroAudio_*` wrappers |
-| No `CLS` in screen modules | Use `Window_DrawScreen%` or `Window_Clear` |
-| No `PRINT` in logic modules | Only UI modules render |
-| No circular dependencies | Include order is load-order in QB64 |
+| Rule                                                     | Detail                                     |
+| -------------------------------------------------------- | ------------------------------------------ |
+| No `CONST` / `TYPE` / `DIM SHARED` in modules            | All in `main.bas` only                     |
+| No `SOUND` / `BEEP` / `PLAY` outside `sound_manager.bas` | Use `RetroAudio_*` wrappers                |
+| No `CLS` in screen modules                               | Use `Window_DrawScreen%` or `Window_Clear` |
+| No `PRINT` in logic modules                              | Only UI modules render                     |
+| No circular dependencies                                 | Include order is load-order in QB64        |
 
 ---
 
@@ -217,6 +251,9 @@ DIM SHARED g_ActiveTheme AS INTEGER
 '$Include: 'search/search_engine.bas'
 '$Include: 'search/search_filters.bas'
 '$Include: 'search/search_ui.bas'
+'$Include: 'productivity/journal_manager.bas'
+'$Include: 'productivity/stream_input.bas'
+'$Include: 'productivity/date_helpers.bas'
 '$Include: 'file_manager.bas'
 '$Include: 'idea_manager.bas'
 '$Include: 'export/export_manager.bas'
@@ -249,16 +286,16 @@ Theme preference is saved automatically to `theme.cfg` — no recompile needed t
 
 Results are ranked by a weighted score — higher scores surface first:
 
-| Match type | Points |
-|---|---|
+| Match type                 | Points       |
+| -------------------------- | ------------ |
 | Keyword found in idea body | +3 per token |
-| Keyword found in tags | +2 per token |
-| Full phrase match in body | +1 bonus |
-| Priority: LOW | +2 |
-| Priority: MEDIUM | +5 |
-| Priority: HIGH | +10 |
-| Priority: CRITICAL | +15 |
-| Favorited idea | +20 |
+| Keyword found in tags      | +2 per token |
+| Full phrase match in body  | +1 bonus     |
+| Priority: LOW              | +2           |
+| Priority: MEDIUM           | +5           |
+| Priority: HIGH             | +10          |
+| Priority: CRITICAL         | +15          |
+| Favorited idea             | +20          |
 
 ---
 
@@ -266,17 +303,17 @@ Results are ranked by a weighted score — higher scores surface first:
 
 All audio is theme-aware — the same event plays different tones depending on active theme:
 
-| Event | Trigger | Fallout | DOS | Cyberdeck |
-|---|---|---|---|---|
-| `SND_KEYPRESS` | Each typed char in boot | 440 Hz warm | 1200 Hz sharp | 900 Hz digital |
-| `SND_MENU_MOVE` | Valid menu selection | 330 Hz | 800 Hz | 1100 Hz |
-| `SND_CONFIRM` | Idea saved, theme applied, exit | Soft ascending | Mid double-beep | Synth triple |
-| `SND_ERROR` | Invalid input, no results | Low buzz | Sharp drop | Digital drop |
-| `SND_NOTIFY` | Search results found | Warm double | Clean double | Synth triple |
-| `SND_BOOT_BEEP` | Per boot sequence line | 370 Hz | 1000 Hz | 1500 Hz |
-| `SND_READY` | System ready chime | `A B >C` | `C E G >C` fast | `>C E G >C` high |
-| `SND_EXPORT` | Export completed | Warm rising | Clean double | Neon pulse |
-| `SND_THEME_CHANGE` | Theme switched | Multi-note chime | Multi-note chime | Multi-note chime |
+| Event              | Trigger                         | Fallout          | DOS              | Cyberdeck        |
+| ------------------ | ------------------------------- | ---------------- | ---------------- | ---------------- |
+| `SND_KEYPRESS`     | Each typed char in boot         | 440 Hz warm      | 1200 Hz sharp    | 900 Hz digital   |
+| `SND_MENU_MOVE`    | Valid menu selection            | 330 Hz           | 800 Hz           | 1100 Hz          |
+| `SND_CONFIRM`      | Idea saved, theme applied, exit | Soft ascending   | Mid double-beep  | Synth triple     |
+| `SND_ERROR`        | Invalid input, no results       | Low buzz         | Sharp drop       | Digital drop     |
+| `SND_NOTIFY`       | Search results found            | Warm double      | Clean double     | Synth triple     |
+| `SND_BOOT_BEEP`    | Per boot sequence line          | 370 Hz           | 1000 Hz          | 1500 Hz          |
+| `SND_READY`        | System ready chime              | `A B >C`         | `C E G >C` fast  | `>C E G >C` high |
+| `SND_EXPORT`       | Export completed                | Warm rising      | Clean double     | Neon pulse       |
+| `SND_THEME_CHANGE` | Theme switched                  | Multi-note chime | Multi-note chime | Multi-note chime |
 
 ---
 
@@ -294,7 +331,13 @@ All audio is theme-aware — the same event plays different tones depending on a
 [ ] WAV/OGG streaming via _SNDOPEN
 [ ] Theme editor
 [ ] Custom downloadable theme packs
-[ ] Journal entries system
+[x] Daily Journal Mode foundation
+[x] Thought Stream Mode foundation
+[ ] Journal timeline navigation
+[ ] Mood tracking system
+[ ] Searchable journal archives
+[ ] Stream session organization
+[ ] Quick capture hotkeys
 [ ] Project / task system
 [ ] CSV export format
 [ ] PDF export format
@@ -306,10 +349,10 @@ All audio is theme-aware — the same event plays different tones depending on a
 
 ## `> REQUIREMENTS`
 
-- [QB64-PE v4.2.0+](https://www.qb64phoenix.com/)
-- Windows (tested), Linux/macOS via QB64-PE
-- Terminal with 80×25 minimum resolution recommended
-- PC speaker or system audio for sound effects
+* [QB64-PE v4.2.0+](https://www.qb64phoenix.com/)
+* Windows (tested), Linux/macOS via QB64-PE
+* Terminal with 80×25 minimum resolution recommended
+* PC speaker or system audio for sound effects
 
 ---
 
@@ -331,7 +374,7 @@ All audio is theme-aware — the same event plays different tones depending on a
 ## `> AUTHOR`
 
 **Jeremy Stevens** — *Brain Dump QB64*
-Built with QB64-PE · Phase 1 & Phase 2 complete
+Built with QB64-PE · Core Systems, Retro UX Layer, and Productivity Foundations complete
 
 ---
 
