@@ -206,7 +206,7 @@ FUNCTION Window_DrawMenuScreen% (menuTitle AS STRING)
 
     ' Centred themed menu box
     menuWidth  = 38
-    menuHeight = 17
+    menuHeight = 19
     menuCol    = (UI_COLS - menuWidth) \ 2 + 1
     menuRow    = 3
 
